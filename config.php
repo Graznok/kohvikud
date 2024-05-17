@@ -2,7 +2,7 @@
 
     $kasutaja = "atursk";
     $dbserver = "localhost";
-    $andmebaas = "muusikapood";
+    $andmebaas = "kohvikud";
     $pw = "Passw0rd";
 
     $yhendus = mysqli_connect($dbserver, $kasutaja, $pw, $andmebaas);
