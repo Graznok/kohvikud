@@ -15,29 +15,52 @@
             $paring = 'SELECT * FROM toidukohad WHERE nimi LIKE "%'.$s.'%" ';
         } else {
             /********************************* */
+            $algus = 0;
+
             if (isset($_GET['next'])) {
                 $algus = $_GET['next'];
-            } 
-            else if (isset($_GET['prev'])) {
-                $algus = $_GET['prev']-10;
-            } else {
-                $algus = 0;
+            } else if (isset($_GET['prev'])) {
+                $algus = $_GET['prev'] - 10;
             }
-                $algus += 10;
-                $lopp = $algus - 10;
-    
 
-                
+            if ($algus < 0) $algus = 0;
+
+            // päring mille saadan andmebaasi
+            $paring = "SELECT * FROM toidukohad LIMIT $algus,10";
+
+            // küsin kogu toidukohtade arvu
+            $toidukohad_kokku_paring = mysqli_query($yhendus, "SELECT COUNT(*) as kokku FROM toidukohad");
+            $toidukohad_kokku = mysqli_fetch_assoc($toidukohad_kokku_paring)['kokku'];
+
+            $next = $algus + 10;
+            $prev = $algus - 10;
+
+            if ($prev < 0) $prev = 0;
+            if ($next >= $toidukohad_kokku) $next = $toidukohad_kokku - ($toidukohad_kokku % 10);
+        }
+
 
             //päring mille saadan andmebaasi
-            $paring = "SELECT * FROM toidukohad LIMIT $algus,10";
-        }
+         
+        
         //saadan soovitud ühendusele minu päringu
             $valjund = mysqli_query($yhendus, $paring);
 
     ?>
-    <div class="container">
+   <div class="container">
         <h1>Valige asutus mida hinnata</h1>
+        <div class="row">
+            <div class="col-9">
+            </div>
+            <div class="col-3 text-end">
+            <form class="mb-3">
+            <div class="input-group">
+                <input type="text" class="form-control" name="s" placeholder="Otsi asutust" value="<?php if (!empty($_GET["s"])) echo $_GET["s"]; ?>">
+                <button class="btn btn-primary" type="submit">Otsi</button>
+            </div>
+        </form>
+            </div>
+        </div>
         <table class="table table-sm">
             <tr>
                 <th>Nimi</th>
@@ -52,6 +75,8 @@
         
         ?>
             <tr>
+                <a href="kohvik.php"></a>
+                <td><a href="kohvik.php?id=<?php echo $rida['id']; ?>"><?php echo $rida['nimi']; ?></a></td>
                 <td><?php echo $rida['nimi']; ?></td>
                 <td><?php echo $rida['asukoht']; ?></td>
                 <td><?php echo $rida['keskmine_hinne']; ?></td>

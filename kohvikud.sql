@@ -20,12 +20,17 @@ SET time_zone = "+00:00";
 --
 -- Andmebaas: `kohvikud`
 --
-
+CREATE DATABASE IF NOT EXISTS `kohvikud`;
+USE `kohvikud`;
 -- --------------------------------------------------------
 
 --
 -- Tabeli struktuur tabelile `hinnangud`
 --
+CREATE USER IF NOT EXISTS 'atursk'@'localhost' IDENTIFIED BY 'atursk';
+GRANT ALL PRIVILEGES ON `kohvikud`.* TO 'atursk'@'localhost';
+FLUSH PRIVILEGES;
+
 
 CREATE TABLE `hinnangud` (
   `id` int(6) NOT NULL,
